@@ -31,7 +31,7 @@ Bem-vindo ao sistema de restaurante! Este projeto foi desenvolvido para simular 
     cd Restaurant-System
 3. Run Code:
    ```sh
-python index.py
+      python index.py
 
 Lista de Pagers
 O sistema inclui uma lista de 50 pagers para gerenciar os pedidos dos clientes.
