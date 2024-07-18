@@ -35,6 +35,8 @@ def Menu_Client():
             run = input("Deseja Continuar ?: (y/n) ")
             if run.lower() == "y":
                 Add_Food()
+            elif run.lower() == "":
+                Add_Food()
             else:
                 Exit_Order(food_List=client_food)
         else:
@@ -52,6 +54,7 @@ def Menu_Client():
             if client_user.Money >= total:
                 client_user.Money -= total
                 print(f"Pedido confirmado! Seu saldo atual é: R$ {client_user.Money:.2f}")
+                client_user.Money = 100.0
                 orders.append(food_List)
                 Start()
             else:
@@ -71,7 +74,9 @@ def Admin_Panel():
             for i in admins:
                 if name == i["name"] and senha == i["senha"]:
                     Admin_Main()
-            print("Nome Ou Senha Estão Incorretos. Por favor, tente novamente. Se o problema persistir, informe um gerente.")
+                else:
+                    print("Nome Ou Senha Estão Incorretos. Por favor, tente novamente. Se o problema persistir, informe um gerente.")
+                    Start()
             Start()
         else:
             print("Você não possui acesso ao Painel Admin.")
@@ -81,6 +86,10 @@ def Admin_Panel():
         def Manege_Menu():
             def Add_Item():
                 item_name = input("Digite o Nome do Item: ")
+                if item_name in Menu:
+                    print("Este Iten Ja Esta No Menu")
+                    sleep(0.5)
+                    Add_Item()
                 item_value = input("Digite o Valor do Item: ")
                 Menu[item_name] = item_value
                 print(f"Item {item_name} adicionado com sucesso.")
@@ -149,17 +158,20 @@ def Admin_Panel():
             #Funçoes
             def Remove_Order():
                 print(f"Orders: {orders}")
-                index_remove = int(input("Digite O Mumero Da Ordern Para Ser Removida (Orders E uma Arry ou seja o 1 valor e indicado como 0)"))
-                orders.remove(index_remove)
+                index_remove = int(input("Digite O Mumero Da Ordern Para Ser Removida (Orders E uma Arry ou seja o 1 valor e indicado como 0): "))
+                del orders[index_remove]
                 Manege_Orders()
 
             #Interface
             print(f"Orders: {orders}")
             print("1. Remover Order")
+            print("2. Voltar")
 
             input_client = input("Digite Sua Resposta: ")
             if input_client == "1":
                 Remove_Order()
+            elif input_client == "2":
+                Admin_Main()
 
             
 
@@ -176,7 +188,7 @@ def Admin_Panel():
         elif command == "2":
             Manege_Admin()
         elif command == "3":
-            pass
+            Manege_Orders()
         elif command == "4":
             Start()
 
