@@ -1,7 +1,17 @@
 from data import User, Menu, pagers,admins,manager,orders
 from time import sleep
+import asyncio
 
 #Code By Quitto
+
+# Async Fuctions
+async def Calc_Time_Order():
+    time = 30
+    while time > 0 :
+        await asyncio.sleep(1)
+        time -= 1
+    remove_order = orders.pop(0)
+    return remove_order
 
 #Interface
 def Start():
@@ -38,12 +48,12 @@ def Menu_Client():
             elif run.lower() == "":
                 Add_Food()
             else:
-                Exit_Order(food_List=client_food)
+                asyncio.run(Exit_Order(food_List=client_food))
         else:
             print("Opção inválida. Tente novamente.")
             Add_Food()
     #Exit Order
-    def Exit_Order(food_List):
+    async def Exit_Order(food_List):
         total = sum(Menu[item] for item in client_food) #Passa Todos Os iten da dict para a arry pasanmdo os os valores somados
         print(f"Total do pedido: R$ {total:.2f}")
 
@@ -56,6 +66,7 @@ def Menu_Client():
                 print(f"Pedido confirmado! Seu saldo atual é: R$ {client_user.Money:.2f}")
                 client_user.Money = 100.0
                 orders.append(food_List)
+                asyncio.create_task(Calc_Time_Order())
                 Start()
             else:
                 print("Saldo insuficiente para completar o pedido.")
@@ -159,7 +170,13 @@ def Admin_Panel():
             def Remove_Order():
                 print(f"Orders: {orders}")
                 index_remove = int(input("Digite O Mumero Da Ordern Para Ser Removida (Orders E uma Arry ou seja o 1 valor e indicado como 0): "))
-                del orders[index_remove]
+                if index_remove < 0 :
+                    print("Index Nao Existente")
+                    Remove_Order()
+                elif index_remove > len(orders):
+                    print("Index Nao Pode Ser Indeficado")
+                    Remove_Order()
+                del orders[index_remove] #.remove funcio0na apenas com nome do elemto somente  o del com asesso al elemento pode deletalo pelo index na list 
                 Manege_Orders()
 
             #Interface
